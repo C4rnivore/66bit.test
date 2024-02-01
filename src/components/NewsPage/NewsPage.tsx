@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FetchTheme, Themes } from '../../utils/ThemesApi';
 import { FetchNews, NewsDTO } from '../../utils/NewsApi';
+import { useNetworkStatus } from '../../utils/useNetworkStatus';
 import { ThemeContext } from '../../App';
 import { saveTheme } from '../ThemesPage/ThemesPage';
 
@@ -14,6 +15,7 @@ function NewsPage() {
     const [newsList, setNewsList] = useState<Array<NewsDTO>>([])
     const [pagesLoaded, setPagesLoaded] = useState<number>(1)
     const {currentTheme, setCurrentTheme} = useContext(ThemeContext)
+    const isOnline = useNetworkStatus()
     const refresh = useRef<HTMLDivElement>(null)
     const refreshIc = useRef<HTMLImageElement>(null)
 
@@ -23,22 +25,32 @@ function NewsPage() {
     let currentY = 0
 
     useEffect(()=>{
-        FetchNews(pagesLoaded, 10)
-        .then(resposne => {
-            setNewsList(news => [...news, ...resposne?.data])
-            setContentLoading(false)
-        })
+        if(isOnline){
+            FetchNews(pagesLoaded, 10)
+            .then(resposne => {
+                setNewsList(news => [...news, ...resposne?.data])
+                localStorage.setItem('CahedData', JSON.stringify([...newsList, ...resposne?.data]))
+                setContentLoading(false)
+            })
+        }
+        else{
+            if(localStorage.getItem('CahedData') !== null)
+                setNewsList(JSON.parse(localStorage.getItem('CahedData')!))
+        }
+        
     },[pagesLoaded])
 
     useEffect(()=>{
         window.onscroll = onPageScroll
         window.ontouchstart = onTouchStart
         window.ontouchmove = onTouchMove
-        window.ontouchend = onTouchEnd
-        console.log(currentTheme);
+        window.ontouchend = onTouchEnd        
     },[])
 
     useEffect(()=>{
+        if(!isOnline)
+            return
+
         if(currentTheme.mainColor === null || currentTheme.secondColor === null || currentTheme.textColor === null){
             FetchTheme(Themes.light)
             .then(res =>{
@@ -106,6 +118,9 @@ function NewsPage() {
     return (
             <main>
                 <h1>Новостной портал</h1>
+
+                { isOnline? <></> : <span>Offline status</span> }
+                
                 <div ref={refresh} className={"refresh_container"}>
                     <img ref={refreshIc} src={refreshIcon} alt="" />
                 </div>

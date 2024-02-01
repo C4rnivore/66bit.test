@@ -1,8 +1,9 @@
-import { useContext, useEffect } from 'react';
 import { FetchTheme, ThemeDTO, Themes } from '../../utils/ThemesApi';
+import { useNetworkStatus } from '../../utils/useNetworkStatus';
+import { useContext, useEffect } from 'react';
+import { ThemeContext } from '../../App';
 
 import './ThemesPage.css'
-import { ThemeContext } from '../../App';
 
 export const saveTheme = (theme:ThemeDTO) => {
     localStorage.setItem('MainColor', theme.mainColor)
@@ -13,13 +14,25 @@ export const saveTheme = (theme:ThemeDTO) => {
 function ThemesPage() {
     const {currentTheme, setCurrentTheme} = useContext(ThemeContext)
     const root = document.querySelector<HTMLElement>(':root');
+    const isOnline = useNetworkStatus()
 
     function handleThemeBtnClick(themeName:Themes){
+        if(!isOnline){
+            let selectedTheme = Themes[themeName]
+            let cahedItem = localStorage.getItem(selectedTheme)
+
+            if (cahedItem !== null){
+                setCurrentTheme(cur=> cur = JSON.parse(cahedItem!))
+                saveTheme(JSON.parse(cahedItem!))
+            }     
+        }
+
         FetchTheme(themeName)
         .then(res =>{
             if(res) {
                 setCurrentTheme(cur=> cur = res)
                 saveTheme(res)
+                localStorage.setItem(Themes[themeName], JSON.stringify(res))
             }
         })
     }

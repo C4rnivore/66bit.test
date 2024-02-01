@@ -1,0 +1,16 @@
+#header{
+    padding: 20px 60px;
+    background-color: var(--main-color);
+    border-bottom: 1px solid var(--text-color)
+}
+
+.header_nav > ul{
+    list-style-type: none;
+    display: flex;
+    gap:1em;
+}
+
+.header_nav > ul > li> a{
+    text-decoration: none;
+    color:var(--text-color)
+}

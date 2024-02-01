@@ -1,0 +1,13 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root{
+    --main-color:rgb(206, 240, 227);
+    --second-color: rgb(255, 255, 255);
+    --text-color: rgb(10, 10, 10);
+}
+body{
+    background-color: var(--second-color);
+}

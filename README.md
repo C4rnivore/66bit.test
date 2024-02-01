@@ -1,30 +1,18 @@
-# React + TypeScript + Vite
+Тестовое задание. Frontend (React)
+Необходимо написать SPA приложение на React, которое будет получать новости и изменять внешний вид (тему) при нажатии соответствующих кнопок.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+API для мобильного приложения содержит 2 метода: • Метод на получение новостей:
 
-Currently, two official plugins are available:
+Метод на получение новостей:  
+https://frontappapi.dock7.66bit.ru/api/news/get?page=1&count=10 
+Метод на получение темы приложения:
+Метод на получение темы приложения: 
+https://frontappapi.dock7.66bit.ru/api/theme/get?name=dark 
+https://frontappapi.dock7.66bit.ru/api/theme/get?name=light
+https://frontappapi.dock7.66bit.ru/api/theme/get?name=blue 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Приложение должно содержать 2 экрана:
+На первом экране должна быть представлена лента новостей. Новости должны обновляться посредством механизма pull-to-refresh (swipe-to-refresh) а также по нажатию соответствующей кнопки. При большом количестве новостей, они должны подгружаться по мере прокрутки 
+На втором экране должны располагаться 3 кнопки, содержащие разные темы. При нажатии на кнопку необходимо «подтягивать» соответствующую тему через API и изменять цветовую схему приложения. Настройки темы должны сохраняться при перезапуске. 
+Плюсом будет возможность просматривать уже загруженные новости в режиме оффлайн.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
